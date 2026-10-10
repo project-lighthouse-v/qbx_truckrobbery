@@ -40,7 +40,26 @@ return {
     },
 
     alertPolice = function(src, coords)
-        local msg = locale("info.alert_desc")
+        if GetResourceState('ps-dispatch') == 'started' then
+            TriggerEvent('ps-dispatch:server:notify', {
+                message = locale('info.alert_title'),
+                codeName = 'vanrobbery',
+                code = '10-90',
+                icon = 'fas fa-van-shuttle',
+                priority = 2,
+                coords = {
+                    x = coords.x,
+                    y = coords.y,
+                    z = coords.z
+                },
+                information = locale('info.alert_desc'),
+                jobs = { 'leo' }
+            })
+            return
+        end
+
+        lib.print.warn('ps-dispatch is not started; using the default qbx_truckrobbery police alert')
+        local msg = locale('info.alert_desc')
         local alertData = {
             title = locale('info.alert_title'),
             coords = {
